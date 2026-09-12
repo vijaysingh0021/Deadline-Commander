@@ -1,65 +1,57 @@
-# LifeRPG
-A full-stack gamified productivity platform that transforms real-world tasks and habits into RPG quests, rewarding users with XP, levels, streaks, character attributes, virtual currency, and unlockable rewards.
+# ⚔️ Deadline Commander
 
-# ⚔️ QuestLife — Turn Your Life Into a Game
+> Turn your deadlines into missions. Plan smarter, execute faster, and defeat every deadline.
 
-> Complete quests. Earn XP. Build your character. Level up your real life.
+Deadline Commander is a productivity-focused RPG web application built around a simple problem:
 
-QuestLife is a full-stack gamified productivity platform that transforms everyday tasks into an RPG-style adventure.
+**When you have multiple assignments, projects, exams, and personal tasks, it becomes difficult to know what to work on first and whether you are actually on track.**
 
-Instead of another boring to-do list, QuestLife lets you create real-life quests, complete them, earn XP, maintain streaks, improve character attributes, collect rewards, and track your progress over time.
+Instead of giving users another basic to-do list, Deadline Commander turns their workload into a structured mission system.
 
-**Your life is the game. Your habits are the quests. Your progress is your character.**
-
----
-
-## 🌟 Why QuestLife?
-
-Most productivity apps follow a simple loop:
-
-**Task → Complete → Done**
-
-QuestLife turns that into:
-
-**Quest → Action → XP → Progress → Rewards → Level Up**
-
-Studying can improve your **Intelligence**.
-
-Going to the gym can improve your **Strength**.
-
-Reading can improve your **Knowledge**.
-
-Coding can improve your **Technology** skill.
-
-Small daily actions become visible character progression.
-
-The goal isn't to make productivity complicated.
-
-The goal is to make progress feel rewarding.
+Your deadlines become **bosses**, your work becomes **missions**, and completing important work helps your character progress.
 
 ---
 
-## ✨ Features
+## 🎯 Why Deadline Commander?
 
-### 🎯 Quest Management
+Most productivity apps tell you:
 
-Create and manage quests with:
+> "You have 8 tasks remaining."
 
-- Title
-- Description
-- Category
-- Difficulty
-- XP reward
-- Coin reward
-- Priority
-- Due date
-- Completion status
+Deadline Commander tries to answer a more useful question:
 
-Full CRUD support:
+> **"What should I work on right now so I don't miss my important deadlines?"**
+
+The application considers things such as:
+
+- Deadline urgency
+- Task importance
+- Estimated workload
+- Task dependencies
+- Available time
+- Current progress
+
+It then creates a prioritized plan for the user.
+
+---
+
+## 🧩 How It Works
+
+The basic flow is:
 
 ```text
-Create
-Read
-Update
-Delete
-Complete
+Add Goals / Deadlines
+        ↓
+Break them into Tasks
+        ↓
+Analyze Priority & Risk
+        ↓
+Generate Missions
+        ↓
+Complete Work
+        ↓
+Earn XP & Rewards
+        ↓
+Track Progress
+        ↓
+Adjust the Plan
