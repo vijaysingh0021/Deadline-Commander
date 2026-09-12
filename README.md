@@ -55,3 +55,15 @@ Earn XP & Rewards
 Track Progress
         ↓
 Adjust the Plan
+```
+
+## Deploying the frontend on Vercel
+
+Set the Vercel project Root Directory to `frontend`. Vercel detects Vite; use
+`npm run build` as the build command and `dist` as the output directory.
+
+- Demo mode needs no environment variables.
+- For live authentication and snapshot sync, set `VITE_API_URL` to the public
+  HTTPS URL of the separately deployed API, without a trailing slash.
+- Configure the API with `JWT_SECRET`, `MONGODB_URI`, and `CORS_ORIGIN` set to
+  the deployed Vercel frontend URL.
