@@ -10,7 +10,7 @@ export const Card = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(f
     <div
       ref={ref}
       className={cn(
-        'relative rounded-xl border border-line-soft bg-gradient-to-b from-ink-800/90 to-ink-850',
+        'hud-panel relative rounded-xl border border-line-soft bg-gradient-to-b from-ink-800/90 to-ink-850',
         'shadow-lift',
         className,
       )}
@@ -58,6 +58,6 @@ export function CardBody({ className, children, ...rest }: HTMLAttributes<HTMLDi
 /** A quiet inset well for a high-contrast readout inside a card. */
 export function Panel({ className, children }: { className?: string; children: ReactNode }) {
   return (
-    <div className={cn('rounded-lg border border-line-soft bg-ink-900/60', className)}>{children}</div>
+    <div className={cn('hud-readout rounded-lg border border-line-soft bg-ink-900/60', className)}>{children}</div>
   )
 }

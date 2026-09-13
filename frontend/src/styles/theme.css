@@ -142,6 +142,31 @@ body {
   opacity: 0.14;
   background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(123, 240, 218, 0.035) 3px 4px);
 }
+
+/* Shared tactical surfaces: quiet at rest, with structural HUD detail. */
+.hud-panel {
+  background-image:
+    linear-gradient(135deg, rgba(45, 226, 195, 0.045), transparent 28%),
+    linear-gradient(to bottom, rgba(21, 25, 34, 0.94), rgba(18, 21, 28, 0.98));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035), 0 12px 32px -18px rgba(0, 0, 0, 0.8);
+}
+.hud-panel::before {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  top: -1px;
+  left: 14px;
+  width: 38px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--color-command-500);
+  box-shadow: 0 0 12px var(--color-command-glow);
+  opacity: 0.62;
+}
+.hud-readout {
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.025), transparent 60%);
+}
+.hud-readout:hover { border-color: rgba(45, 226, 195, 0.24); }
 .game-frame::before {
   content: '';
   position: absolute;

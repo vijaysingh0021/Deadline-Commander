@@ -5,7 +5,7 @@
    ───────────────────────────────────────────────────────── */
 
 import { motion } from 'framer-motion'
-import { Trophy, Shield, Sparkles, Lock, ChevronRight } from 'lucide-react'
+import { Trophy, Shield, Sparkles, Lock, ChevronRight, Radio, Crosshair, Flame, Medal, Activity } from 'lucide-react'
 import { useCommand } from '@/hooks/useCommand'
 import { PageHeader } from '@/components/ui/SectionHeader'
 import { Card, CardHeader, CardBody, Panel } from '@/components/ui/Card'
@@ -14,7 +14,7 @@ import { ProgressBar } from '@/components/ui/ProgressBar'
 import { Ring } from '@/components/ui/charts'
 import { ErrorState } from '@/components/ui/States'
 import { rise, stagger } from '@/animations'
-import { cn } from '@/utils'
+import { cn, duePhrase } from '@/utils'
 import { combatPower, commanderRank } from '@/utils/gamification'
 import type { AttributeMap, Skill } from '@/types'
 
@@ -42,15 +42,24 @@ export function CharacterPage() {
   const skillTiers = [1, 2, 3].map((tier) => profile.skills.filter((s) => s.tier === tier))
   const rank = commanderRank(profile.level)
   const power = combatPower(profile.attributes, profile.level, profile.streak)
+  const activeMissions = data.snapshot.missions.filter((m) => m.status === 'in_progress' || m.status === 'paused')
+  const openMissions = data.snapshot.missions.filter((m) => m.status !== 'completed')
+  const criticalDeadlines = data.snapshot.deadlines
+    .map((deadline) => ({ deadline, risk: data.riskByDeadline.get(deadline.id) }))
+    .filter(({ risk }) => risk?.level === 'CRITICAL' || risk?.level === 'HIGH')
+    .sort((a, b) => (b.risk?.score ?? 0) - (a.risk?.score ?? 0))
+  const completedMissions = data.snapshot.missions.filter((m) => m.status === 'completed').length
+  const completionRate = data.snapshot.missions.length ? Math.round((completedMissions / data.snapshot.missions.length) * 100) : 0
+  const commendations = data.snapshot.achievements.filter((a) => a.unlocked).length
 
   return (
     <motion.div variants={stagger(0.05)} initial="hidden" animate="show" className="space-y-6">
       <motion.div variants={rise}>
         <PageHeader
-          eyebrow="Identity"
-          title="Character"
-          subtitle="You level up by doing the work, not by clicking. Attributes reflect how you actually operate."
-          action={<Badge tone="xp">{profile.title}</Badge>}
+          eyebrow="Commander dossier"
+          title="Commander Profile"
+          subtitle="Your operational record is built from completed work, protected deadlines and consistent execution."
+          action={<Badge tone="xp">{rank.name}</Badge>}
         />
       </motion.div>
 
@@ -72,6 +81,43 @@ export function CharacterPage() {
             <p className="mt-2 text-xs text-tx-500">{profile.streak}-day streak · <span className="font-bold text-gold-400">{power} combat power</span></p>
           </div>
         </Panel>
+      </motion.div>
+
+      <motion.div variants={rise} className="grid gap-4 lg:grid-cols-[1.25fr_0.75fr]">
+        <Card className="game-frame overflow-hidden border-command-500/20 bg-gradient-to-br from-command-500/[0.09] via-ink-850 to-ink-900">
+          <CardBody className="relative grid gap-5 py-5 sm:grid-cols-[auto_1fr] sm:items-center">
+            <div className="relative">
+              <Ring value={xpPct} size={104} stroke={7} tone="#2de2c3">
+                <span className="font-display text-xl font-bold text-command-300">{profile.level}</span>
+                <span className="-mt-1 text-[8px] font-bold tracking-[0.16em] text-tx-500">LEVEL</span>
+              </Ring>
+              <span className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full border border-command-500/40 bg-ink-900 text-command-300 shadow-glow"><Radio className="h-3.5 w-3.5" /></span>
+            </div>
+            <div className="min-w-0">
+              <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-command-300"><span className="h-1.5 w-1.5 rounded-full bg-command-400" /> Live commander signal</p>
+              <h2 className="mt-2 truncate font-display text-2xl font-bold tracking-tight text-tx-100">{profile.name}</h2>
+              <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-tx-500">{profile.title} <span className={rank.tone}>/ {rank.name}</span></p>
+              <div className="mt-4"><div className="flex items-center justify-between text-[11px] font-semibold text-tx-400"><span>Promotion progress</span><span className="tnum">{profile.xp} / {profile.xpToNext} XP</span></div><ProgressBar value={xpPct} tone="xp" height="h-2" className="mt-1.5" /></div>
+            </div>
+          </CardBody>
+        </Card>
+        <div className="grid grid-cols-2 gap-3">
+          <SignalMetric icon={Flame} label="Streak" value={`${profile.streak} days`} tone="text-high-500" />
+          <SignalMetric icon={Activity} label="Power" value={`${power}`} tone="text-command-300" />
+          <SignalMetric icon={Crosshair} label="Active" value={`${activeMissions.length || openMissions.length} missions`} tone="text-xp-500" />
+          <SignalMetric icon={Medal} label="Commendations" value={`${commendations} earned`} tone="text-gold-400" />
+        </div>
+      </motion.div>
+
+      <motion.div variants={rise} className="grid gap-4 lg:grid-cols-[1.25fr_0.75fr]">
+        <Card>
+          <CardHeader eyebrow={<><Crosshair className="h-3 w-3" aria-hidden /> Mission readiness</>} title="Priority signal" aside={<Badge tone={criticalDeadlines.length ? 'crit' : 'safe'}>{criticalDeadlines.length ? `${criticalDeadlines.length} elevated` : 'clear'}</Badge>} />
+          <CardBody className="space-y-2.5 pt-4">
+            {criticalDeadlines.slice(0, 3).map(({ deadline, risk }) => <div key={deadline.id} className="flex items-center gap-3 rounded-lg border border-line-soft bg-ink-900/50 px-3.5 py-3"><span className={cn('flex h-8 w-8 items-center justify-center rounded-md border', risk?.level === 'CRITICAL' ? 'border-crit-500/40 bg-crit-500/10 text-crit-500' : 'border-high-500/40 bg-high-500/10 text-high-500')}><Crosshair className="h-4 w-4" /></span><div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold text-tx-200">{deadline.title}</p><p className="mt-0.5 text-[11px] text-tx-500">{duePhrase(deadline.dueDate)} · {risk?.score ?? 0}% threat</p></div><Badge tone={risk?.level === 'CRITICAL' ? 'crit' : 'warn'}>{risk?.level ?? 'SAFE'}</Badge></div>)}
+            {criticalDeadlines.length === 0 ? <p className="rounded-lg border border-dashed border-line-soft px-3.5 py-5 text-center text-sm text-tx-500">No elevated deadline threats. Maintain the current pace.</p> : null}
+          </CardBody>
+        </Card>
+        <Card><CardHeader eyebrow={<><Trophy className="h-3 w-3" aria-hidden /> Field record</>} title="Execution report" /><CardBody className="grid grid-cols-2 gap-2.5 pt-4"><SignalMetric icon={Activity} label="Completion" value={`${completionRate}%`} tone="text-safe-500" /><SignalMetric icon={Shield} label="Secured" value={`${completedMissions}`} tone="text-command-300" /><SignalMetric icon={Crosshair} label="Open" value={`${openMissions.length}`} tone="text-tx-300" /><SignalMetric icon={Sparkles} label="Skills" value={`${profile.skills.filter((s) => s.unlocked).length}/${profile.skills.length}`} tone="text-violet-400" /></CardBody></Card>
       </motion.div>
 
       {/* Attributes */}
@@ -114,6 +160,15 @@ export function CharacterPage() {
         </Card>
       </motion.div>
     </motion.div>
+  )
+}
+
+function SignalMetric({ icon: Icon, label, value, tone }: { icon: typeof Trophy; label: string; value: string; tone: string }) {
+  return (
+    <Panel className="min-w-0 px-3 py-2.5">
+      <div className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.14em] text-tx-500"><Icon className={cn('h-3 w-3', tone)} aria-hidden />{label}</div>
+      <p className={cn('mt-1 truncate font-display text-sm font-bold', tone)}>{value}</p>
+    </Panel>
   )
 }
 

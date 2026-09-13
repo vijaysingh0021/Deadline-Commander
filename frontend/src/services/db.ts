@@ -240,12 +240,53 @@ function read(): CommanderSnapshot {
       persist(s)
       return s
     }
-    const parsed = JSON.parse(raw) as CommanderSnapshot
-    if (parsed && 'profile' in parsed) return parsed
-    return seed()
+    const parsed = JSON.parse(raw) as unknown
+    const snapshot = migrateSnapshot(parsed)
+    // Persist a migrated workspace once, so every subsequent query sees the
+    // same complete shape rather than a stale record from an older UI build.
+    if (snapshot !== parsed) persist(snapshot)
+    return snapshot
   } catch {
-    return seed()
+    const s = seed()
+    persist(s)
+    return s
   }
+}
+
+/**
+ * Browser storage survives frontend deployments. Earlier builds wrote the
+ * same key before Goals, milestones and other collections existed; accepting
+ * those partial objects makes derived views throw at runtime. Preserve any
+ * valid saved collections, while supplying current defaults for missing ones.
+ */
+function migrateSnapshot(value: unknown): CommanderSnapshot {
+  const base = seed()
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return base
+
+  const stored = value as Partial<CommanderSnapshot>
+  if (!stored.profile || typeof stored.profile !== 'object' || Array.isArray(stored.profile)) return base
+
+  const array = <T,>(candidate: unknown, fallback: T[]): T[] => (Array.isArray(candidate) ? candidate as T[] : fallback)
+  const migrated: CommanderSnapshot = {
+    ...base,
+    ...stored,
+    profile: { ...base.profile, ...stored.profile },
+    deadlines: array(stored.deadlines, base.deadlines),
+    tasks: array(stored.tasks, base.tasks),
+    missions: array(stored.missions, base.missions),
+    milestones: array(stored.milestones, base.milestones),
+    achievements: array(stored.achievements, base.achievements),
+    rewards: array(stored.rewards, base.rewards),
+    activity: array(stored.activity, base.activity),
+    plan: array(stored.plan, base.plan),
+    goals: array(stored.goals, base.goals),
+  }
+
+  const hasCurrentShape =
+    Array.isArray(stored.deadlines) && Array.isArray(stored.tasks) && Array.isArray(stored.missions) &&
+    Array.isArray(stored.milestones) && Array.isArray(stored.achievements) && Array.isArray(stored.rewards) &&
+    Array.isArray(stored.activity) && Array.isArray(stored.plan) && Array.isArray(stored.goals)
+  return hasCurrentShape ? stored as CommanderSnapshot : migrated
 }
 
 function persist(snapshot: CommanderSnapshot) {
