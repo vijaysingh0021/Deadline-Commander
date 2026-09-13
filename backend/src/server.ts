@@ -39,6 +39,10 @@ const authLimiter = rateLimit({
 });
 
 // Health check
+app.get('/', (_req, res) => {
+  res.json({ status: 'ok', service: 'Deadline Commander API' });
+});
+
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
