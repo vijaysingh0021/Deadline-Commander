@@ -188,6 +188,7 @@ export interface CompleteMissionResult {
   snapshot: CommanderSnapshot
   missionTitle: string
   xpGained: number
+  coinsGained: number
   levelsGained: number
   newLevel: number
   attributeDelta: Partial<Profile['attributes']>
@@ -248,11 +249,14 @@ export function completeMission(missionId: string, skillBoost = false): Complete
   let xp = mission.xpReward + milestoneXp
   if (skillBoost) xp += mission.xpReward * 0.5
   xp = Math.round(xp)
+  // In-app, non-financial reward used only by the cosmetic rewards screen.
+  const coins = Math.max(1, Math.round(xp / 8))
 
   const beforeLevel = s.profile.level
   const lvl = applyXp(s.profile, xp)
   s.profile.xp = lvl.remainingXp
   s.profile.level = lvl.finalLevel
+  s.profile.gold += coins
   const levelsGained = lvl.levelsGained
   s.profile.streak += 1
 
@@ -264,7 +268,7 @@ export function completeMission(missionId: string, skillBoost = false): Complete
   })
 
   // 5. Activity log
-  logEvent(s, 'mission', mission.brief, `+${xp} XP · streak ${s.profile.streak}d`, xp)
+  logEvent(s, 'mission', mission.brief, `+${xp} XP · +${coins} coins · streak ${s.profile.streak}d`, xp)
   if (milestoneDefeated && deadline) {
     logEvent(s, 'milestone', `MILESTONE DEFEATED — ${milestoneDefeated}`, `${deadline.title} boss ${bossFrom}% → ${bossTo}% · +${milestoneXp} XP`, milestoneXp)
   }
@@ -283,6 +287,7 @@ export function completeMission(missionId: string, skillBoost = false): Complete
     snapshot: s,
     missionTitle: mission.brief,
     xpGained: xp,
+    coinsGained: coins,
     levelsGained,
     newLevel: s.profile.level,
     attributeDelta: delta,

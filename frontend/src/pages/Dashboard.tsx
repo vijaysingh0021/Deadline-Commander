@@ -190,8 +190,11 @@ export function DashboardPage() {
       </motion.div>
 
       {/* ── Mission + radar ── */}
-      <div className="grid gap-5 lg:grid-cols-5">
-        <motion.div variants={rise} className="lg:col-span-3">
+      {/* Keep the mission deck and radar stacked until there is genuinely
+          enough room after the persistent command menu. The former lg 5-col
+          breakpoint created a wide dead zone on laptop-sized viewports. */}
+      <div className="grid gap-5 2xl:grid-cols-5">
+        <motion.div variants={rise} className="min-w-0 2xl:col-span-3">
           {liveMission ? (
             <ActiveMissionCard
               mission={liveMission.mission}
@@ -215,7 +218,7 @@ export function DashboardPage() {
           )}
         </motion.div>
 
-        <motion.div variants={rise} className="lg:col-span-2">
+        <motion.div variants={rise} className="min-w-0 2xl:col-span-2">
           <DeadlineRadar derived={data} loading={false} />
         </motion.div>
       </div>

@@ -19,7 +19,40 @@ const field =
   'h-11 w-full rounded-lg border border-line bg-ink-900/70 px-3.5 text-sm text-tx-100 placeholder:text-tx-600 ' +
   'focus:border-command-500/60 focus:outline-none'
 
-const RANKS = ['Field Commander', 'Tactical Officer', 'Logistics Specialist', 'Analyst', 'Liberator'] as const
+const RANKS = [
+  'Cadet',
+  'Recruit',
+  'Initiate',
+  'Pathfinder',
+  'Scout',
+  'Operator',
+  'Field Agent',
+  'Tactical Officer',
+  'Intelligence Officer',
+  'Logistics Specialist',
+  'Systems Specialist',
+  'Recon Specialist',
+  'Analyst',
+  'Strategist',
+  'Vanguard',
+  'Sentinel',
+  'Warden',
+  'Navigator',
+  'Operations Lead',
+  'Squad Commander',
+  'Unit Commander',
+  'Field Commander',
+  'Mission Commander',
+  'Strike Commander',
+  'Fleet Commander',
+  'Sector Commander',
+  'Elite Commander',
+  'Command Architect',
+  'High Strategist',
+  'Master Commander',
+  'Grand Commander',
+  'Legendary Commander',
+] as const
 
 export function SignupPage() {
   const navigate = useNavigate()
@@ -34,6 +67,12 @@ export function SignupPage() {
   const submit = async (e: FormEvent) => {
     e.preventDefault()
     if (busy) return
+    // Match the existing backend registerSchema exactly. Keeping this at the
+    // edge gives the commander a useful answer instead of a generic 400.
+    if (IS_LIVE && password.length < 8) {
+      setError('Access code must contain at least 8 characters.')
+      return
+    }
     setBusy(true)
     setError('')
 
@@ -109,9 +148,10 @@ export function SignupPage() {
               <span className="mb-1.5 block text-[10px] font-bold uppercase tracking-[0.18em] text-tx-500">Access code</span>
               <input
                 type="password"
+                minLength={8}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Min 6 characters"
+                placeholder="At least 8 characters"
                 aria-label="Access code"
                 className={field}
               />
@@ -139,7 +179,7 @@ export function SignupPage() {
           size="lg"
           style="solid"
           className="h-11 w-full"
-          disabled={(IS_LIVE ? !commander.trim() || !email.trim() || password.length < 6 : commander.trim().length === 0) || busy}
+          disabled={(IS_LIVE ? !commander.trim() || !email.trim() || password.length < 8 : commander.trim().length === 0) || busy}
         >
           {busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Grid3x3 className="h-4 w-4" aria-hidden />}
           {busy ? 'Enlisting…' : 'Deploy to command center'}

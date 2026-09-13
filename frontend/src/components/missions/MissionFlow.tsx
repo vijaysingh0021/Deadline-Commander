@@ -6,6 +6,7 @@ import { LevelUpOverlay } from '@/components/missions/LevelUp'
 import { useCompleteMission } from '@/hooks/useCommand'
 import { useUi } from '@/stores/ui'
 import type { CompleteMissionResult } from '@/services/api'
+import { soundManager } from '@/services/soundManager'
 
 /**
  * Orchestrates the whole mission experience:
@@ -33,6 +34,11 @@ export function MissionFlow() {
       setPhase(null)
     }
   }, [activeMissionId])
+
+  useEffect(() => {
+    if (result && phase === 'complete') soundManager.play('MISSION_COMPLETE')
+    if (result && phase === 'levelup') soundManager.play('LEVEL_UP')
+  }, [phase, result])
 
   if (focus.phase === 'idle' && phase === null) return null
 

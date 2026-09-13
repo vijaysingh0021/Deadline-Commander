@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Command, Search, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { soundManager } from '@/services/soundManager'
 
 const actions = [
   ['Command center', '/'], ['Quests', '/missions'], ['Deadlines', '/deadlines'],
@@ -28,7 +29,7 @@ export function CommandPalette() {
 
   if (!open) return null
   const matches = actions.filter(([label]) => label.toLowerCase().includes(query.toLowerCase()))
-  const select = (to: string) => { setOpen(false); setQuery(''); navigate(to) }
+  const select = (to: string) => { soundManager.play('BUTTON_CONFIRM'); setOpen(false); setQuery(''); navigate(to) }
   return (
     <div className="fixed inset-0 z-[70] flex items-start justify-center bg-ink-950/70 px-4 pt-[18vh] backdrop-blur-sm" role="presentation" onMouseDown={() => setOpen(false)}>
       <section role="dialog" aria-modal="true" aria-label="Command palette" className="w-full max-w-lg overflow-hidden rounded-xl border border-line bg-ink-900 shadow-float" onMouseDown={(event) => event.stopPropagation()}>

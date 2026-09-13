@@ -10,6 +10,8 @@ export interface IUser extends Document {
   streak: number;
   snapshot?: Record<string, unknown>;
   snapshotUpdatedAt?: Date;
+  passwordResetTokenHash?: string;
+  passwordResetExpiresAt?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -23,7 +25,9 @@ const UserSchema = new Schema<IUser>({
   gold: { type: Number, default: 100 },
   streak: { type: Number, default: 0 },
   snapshot: { type: Schema.Types.Mixed, default: undefined },
-  snapshotUpdatedAt: { type: Date, default: undefined }
+  snapshotUpdatedAt: { type: Date, default: undefined },
+  passwordResetTokenHash: { type: String, default: undefined, select: false },
+  passwordResetExpiresAt: { type: Date, default: undefined, select: false }
 }, { timestamps: true });
 
 export const User = mongoose.model<IUser>('User', UserSchema);

@@ -94,6 +94,14 @@ export async function apiRegister(username: string, email: string, password: str
   })
 }
 
+export async function requestAccessCodeReset(email: string): Promise<{ message: string; developmentToken?: string }> {
+  return request('/forgot-password', { email })
+}
+
+export async function resetAccessCode(token: string, password: string): Promise<void> {
+  await request('/reset-password', { token, password })
+}
+
 export function authToken(): string | null {
   return loadSession()?.token ?? null
 }

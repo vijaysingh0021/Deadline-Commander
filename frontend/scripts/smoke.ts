@@ -96,12 +96,14 @@ async function main() {
 
   console.log('completeTask ceremony (linked mission)')
   const beforeXp = t3.snapshot.profile.xp
+  const beforeCoins = t3.snapshot.profile.gold
   const beforeStreak = t3.snapshot.profile.streak
   const c = await completeTask(newTask!.id)
   const done2 = c.snapshot.tasks.find((x) => x.id === newTask!.id)!
   assert(done2.status === 'done', 'task completed')
   assert(c.snapshot.missions.find((m) => m.taskId === newTask!.id)!.status === 'completed', 'mission ceremony completed')
   assert(c.snapshot.profile.xp > beforeXp, 'XP awarded (ceremony ran)')
+  assert(c.snapshot.profile.gold > beforeCoins, 'in-app coins awarded')
   assert(c.snapshot.profile.streak === beforeStreak + 1, 'streak incremented')
 
   console.log('flipTaskStatus reopen')

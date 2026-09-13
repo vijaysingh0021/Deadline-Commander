@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Check, ArrowRight } from 'lucide-react'
+import { Check, ArrowRight, Coins } from 'lucide-react'
 import type { CompleteMissionResult } from '@/services/api'
 import { Button } from '@/components/ui/Button'
 import { flyUp, backdrop } from '@/animations'
@@ -77,6 +77,9 @@ export function MissionCompletion({
               <span className="pb-1.5 text-sm font-bold text-xp-500/80">XP</span>
             </motion.div>
             <div className="mx-auto mt-2 h-px w-32 bg-gradient-to-r from-transparent via-xp-500/60 to-transparent" />
+            <motion.p animate={{ opacity: stageIdx >= 1 ? 1 : 0.2 }} className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-gold-400">
+              <Coins className="h-3.5 w-3.5" aria-hidden /> +{result.coinsGained} COINS
+            </motion.p>
           </div>
 
           {/* Attributes */}

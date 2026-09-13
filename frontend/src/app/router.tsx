@@ -3,6 +3,8 @@ import { createBrowserRouter, isRouteErrorResponse, Link, useRouteError } from '
 import { AppShell } from '@/components/layout/AppShell'
 import { LoginPage } from '@/pages/Login'
 import { SignupPage } from '@/pages/Signup'
+import { ForgotAccessCodePage } from '@/pages/ForgotAccessCode'
+import { ResetAccessCodePage } from '@/pages/ResetAccessCode'
 
 /** Route-level code splitting — each page loads on demand. */
 const Dashboard = lazy(() => import('@/pages/Dashboard').then((m) => ({ default: m.DashboardPage })))
@@ -39,6 +41,8 @@ export const router = createBrowserRouter([
   /* Standalone auth — no command shell around these. */
   { path: '/login', element: <LoginPage /> },
   { path: '/signup', element: <SignupPage /> },
+  { path: '/forgot-access-code', element: <ForgotAccessCodePage /> },
+  { path: '/reset-access-code', element: <ResetAccessCodePage /> },
 
   {
     path: '/',

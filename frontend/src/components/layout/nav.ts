@@ -24,17 +24,17 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard, group: 'command', exact: true },
-  { to: '/missions', label: 'Missions', icon: Swords, group: 'command' },
+  { to: '/', label: 'Command Center', icon: LayoutDashboard, group: 'command', exact: true },
+  { to: '/missions', label: 'Operations', icon: Swords, group: 'command' },
   { to: '/deadlines', label: 'Deadlines', icon: CalendarClock, group: 'command' },
-  { to: '/tasks', label: 'Tasks', icon: ListChecks, group: 'command' },
-  { to: '/goals', label: 'Goals', icon: Crosshair, group: 'command' },
-  { to: '/planner', label: 'Planner', icon: Target, group: 'command' },
+  { to: '/tasks', label: 'Objectives', icon: ListChecks, group: 'command' },
+  { to: '/goals', label: 'Strategic Goals', icon: Crosshair, group: 'command' },
+  { to: '/planner', label: 'Tactical Map', icon: Target, group: 'command' },
   { to: '/projects', label: 'Projects', icon: FolderKanban, group: 'command' },
-  { to: '/character', label: 'Character', icon: User, group: 'progression' },
-  { to: '/achievements', label: 'Achievements', icon: Trophy, group: 'progression' },
-  { to: '/rewards', label: 'Rewards', icon: Coins, group: 'progression' },
-  { to: '/analytics', label: 'Analytics', icon: BarChart3, group: 'insights' },
+  { to: '/character', label: 'Commander', icon: User, group: 'progression' },
+  { to: '/achievements', label: 'Medal Vault', icon: Trophy, group: 'progression' },
+  { to: '/rewards', label: 'Treasury', icon: Coins, group: 'progression' },
+  { to: '/analytics', label: 'Intelligence', icon: BarChart3, group: 'insights' },
   { to: '/settings', label: 'Settings', icon: Settings, group: 'settings' },
   { to: '/profile', label: 'Profile', icon: UserRound, group: 'settings' },
 ]

@@ -109,6 +109,7 @@ export function LoginPage() {
             className={field}
           />
         </label>
+        {IS_LIVE ? <div className="-mt-2 text-right"><Link to="/forgot-access-code" className="text-xs font-semibold text-command-300 hover:text-command-400">Forgot access code?</Link></div> : null}
 
         {error && (
           <p className="rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-medium text-red-300">{error}</p>
