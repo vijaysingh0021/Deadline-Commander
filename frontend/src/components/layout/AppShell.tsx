@@ -16,7 +16,7 @@ export function AppShell() {
         <TopBar />
         <main id="main" className="app-grid game-shell relative flex-1 overflow-y-auto">
           <div className="relative z-10 mx-auto w-full max-w-[1280px] px-4 pb-24 pt-6 sm:px-6 md:pb-10 lg:px-8 lg:pt-8">
-            <AnimatePresence mode="wait" initial={false}>
+            <AnimatePresence initial={false}>
               <motion.div
                 key={location.pathname}
                 variants={fadeSwap}
