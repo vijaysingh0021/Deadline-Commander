@@ -1,11 +1,11 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+import type { Request, Response } from 'express';
 import { app } from '../src/server.js';
 import { connectDB } from '../src/config/db.js';
 import { jwtSecret } from '../src/config/auth.js';
 
 let databaseConnection: Promise<void> | undefined;
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: Request, res: Response) {
   jwtSecret();
   databaseConnection ??= connectDB();
 

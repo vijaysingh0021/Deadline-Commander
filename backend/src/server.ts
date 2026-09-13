@@ -62,7 +62,7 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// Database & local server startup
+// Database & Server startup
 const startServer = async () => {
   jwtSecret();
   let dbOnline = false;
