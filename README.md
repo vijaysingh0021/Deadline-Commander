@@ -67,26 +67,3 @@ Set the Vercel project Root Directory to `frontend`. Vercel detects Vite; use
   HTTPS URL of the separately deployed API, without a trailing slash.
 - Configure the API with `JWT_SECRET`, `MONGODB_URI`, and `CORS_ORIGIN` set to
   the deployed Vercel frontend URL.
-
-## Deploying the backend on Vercel
-
-Create a second Vercel project from the same repository and set its Root
-Directory to `backend`. Vercel will use `api/index.ts` as the serverless API
-entrypoint. Use the default build settings; the backend does not need a
-custom output directory or a long-running `npm start` command.
-
-Add these Production environment variables in the backend Vercel project:
-
-```dotenv
-JWT_SECRET=<long-random-secret>
-MONGODB_URI=<your-mongodb-atlas-connection-string>
-CORS_ORIGIN=https://<your-frontend-project>.vercel.app
-NODE_ENV=production
-```
-
-After deployment, verify `https://<your-backend-project>.vercel.app/health`,
-then set this in the frontend Vercel project and redeploy it:
-
-```dotenv
-VITE_API_URL=https://<your-backend-project>.vercel.app
-```
