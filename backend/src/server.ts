@@ -14,7 +14,7 @@ import { jwtSecret } from './config/auth.js';
 
 dotenv.config();
 
-const app = express();
+export const app = express();
 
 // Security & Middleware
 app.use(helmet());
@@ -62,7 +62,7 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// Database & Server startup
+// Database & local server startup
 const startServer = async () => {
   jwtSecret();
   let dbOnline = false;
@@ -78,4 +78,8 @@ const startServer = async () => {
   });
 };
 
-startServer().catch(console.error);
+if (process.env.VERCEL !== '1') {
+  startServer().catch(console.error);
+}
+
+export default app;
